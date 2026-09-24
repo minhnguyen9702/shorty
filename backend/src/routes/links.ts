@@ -1,8 +1,9 @@
 import { randomBytes } from "node:crypto";
 import { Router } from "express";
 import { eq } from "drizzle-orm";
-import { db } from "../db/client.js";
-import { links } from "../db/schema.js";
+import { baseUrl } from "../config.ts";
+import { db } from "../db/client.ts";
+import { links } from "../db/schema.ts";
 
 export const linksRouter = Router();
 
@@ -31,7 +32,7 @@ linksRouter.post("/links", async (req, res) => {
             .returning();
 
         if (link) {
-            const shortUrl = `${req.protocol}://${req.get("host")}/${link.slug}`;
+            const shortUrl = `${baseUrl}/${link.slug}`;
             res.status(201).json({ slug: link.slug, url: link.url, shortUrl });
             return;
         }
